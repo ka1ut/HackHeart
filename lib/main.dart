@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screen/playing/playing_screen.dart';
+import 'screen/select_people/select_people.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(title: 'HackUkosen'),
       routes: {
-        '/playing': (context) => const SubPage(), // ルートを追加
+        '/playing': (context) => SubPage(),
+        '/NumberSelector': (context) => NumberSelector() // ルートを追加
       },
     );
   }
@@ -41,12 +43,22 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () =>
-              Navigator.of(context).pushNamed('/playing'), // ボタンを押したときのアクション
-          child: const Text('始めよう！'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed('/playing'), // ボタンを押したときのアクション
+              child: const Text('始めようぜ！'),
+            ),
+            SizedBox(height: 20), // ボタンの間にスペースを追加
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed('/NumberSelector'),
+              child: const Text('人数を選択する'),
+            ),
+          ],
         ),
       ),
     );
   }
 }
+
