@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'screen/playing/playing_screen.dart';
+import 'screen/select_people/select_people.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +17,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'HackUkosen'),
+      routes: {
+        '/playing': (context) => SubPage(),
+        '/NumberSelector': (context) => NumberSelector() // ルートを追加
+      },
     );
   }
 }
@@ -29,14 +35,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,21 +46,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed('/playing'), // ボタンを押したときのアクション
+              child: const Text('始めようぜ！'),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            SizedBox(height: 20), // ボタンの間にスペースを追加
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pushNamed('/NumberSelector'),
+              child: const Text('人数を選択する'),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), 
     );
   }
 }
+
