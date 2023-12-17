@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screen/playing/playing_screen.dart';
+import 'screen/set_pepple/set_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,9 +17,6 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'HackUkosen'),
-      routes: {
-        '/playing': (context) => PlayingPage(),
-      },
     );
   }
 }
@@ -45,7 +42,12 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed('/playing'), // ボタンを押したときのアクション
+              onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PlayingPage()),
+                  );
+                }, // ボタンを押したときのアクション
               child: const Text('始めようぜ！'),
             ),
           ],
