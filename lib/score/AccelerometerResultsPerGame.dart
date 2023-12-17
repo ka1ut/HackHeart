@@ -1,0 +1,6 @@
+
+
+class AccelerometerResultsPerGame{
+
+  AccelerometerResultsPerGame(){;}
+}
