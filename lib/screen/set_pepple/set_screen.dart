@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../components/select_people/select_people.dart';
 import '../now_playing/now_playing.dart';
 
+import '../../components//button//button.dart';
+
 class PlayingPage extends StatefulWidget {
   const PlayingPage({Key? key}) : super(key: key);
 
@@ -31,7 +33,8 @@ class _PlayingPageState extends State<PlayingPage> {
             NumberSelector(
               onNumberSelected: updateSelectedNumber,
             ),
-            ElevatedButton(
+            CustomButton(
+              text: '次へ',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -41,7 +44,6 @@ class _PlayingPageState extends State<PlayingPage> {
                           )),
                 );
               },
-              child: const Text('次へ'),
             ),
           ],
         ),
