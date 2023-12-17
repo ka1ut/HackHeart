@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NumberSelector extends StatefulWidget {
+  final Function(int) onNumberSelected;
+
+  NumberSelector({Key? key, required this.onNumberSelected}) : super(key: key);
+
   @override
   _NumberSelectorState createState() => _NumberSelectorState();
 }
@@ -13,8 +17,8 @@ class _NumberSelectorState extends State<NumberSelector> {
     return Container(
       child: DropdownButton<int>(
         value: selectedNumber,
-        style: TextStyle(fontSize: 24, color: Colors.black), // テキストサイズを大きくする
-        itemHeight: 60, // ドロップダウンのアイテムの高さ
+        style: TextStyle(fontSize: 24, color: Colors.black),
+        itemHeight: 60,
         items: List<DropdownMenuItem<int>>.generate(
           10,
           (index) => DropdownMenuItem(
@@ -26,9 +30,9 @@ class _NumberSelectorState extends State<NumberSelector> {
           setState(() {
             selectedNumber = newValue!;
           });
+          widget.onNumberSelected(selectedNumber);
         },
       ),
     );
   }
 }
-
