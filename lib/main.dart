@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screen/set_pepple/set_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +16,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        textTheme: GoogleFonts.notoSansJpTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
-      home: const MyHomePage(title: 'HackUkosen'),
+      home: const MyHomePage(title: 'HackUkosen',),
     );
   }
 }
@@ -48,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     MaterialPageRoute(builder: (context) => const PlayingPage()),
                   );
                 }, // ボタンを押したときのアクション
-              child: const Text('始めようぜ！'),
+              child: const Text('始めようkぜ！'),
             ),
           ],
         ),
