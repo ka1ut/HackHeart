@@ -20,7 +20,9 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: const MyHomePage(title: 'HackUkosen',),
+      home: const MyHomePage(
+        title: 'HackUkosen',
+      ),
     );
   }
 }
@@ -47,12 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PlayingPage()),
-                  );
-                }, // ボタンを押したときのアクション
-              child: const Text('始めようkぜ！'),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PlayingPage()),
+                );
+              }, // ボタンを押したときのアクション
+              child: const Text('始めようぜ！'),
             ),
           ],
         ),
@@ -60,4 +62,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
