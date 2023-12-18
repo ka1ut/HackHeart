@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../components/select_people/select_people.dart';
 import '../now_playing/now_playing.dart';
 
-import '../../components//button//button.dart';
+import '../../components/text_button/text_button.dart';
 
 class PlayingPage extends StatefulWidget {
   const PlayingPage({Key? key}) : super(key: key);
