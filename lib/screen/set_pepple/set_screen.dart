@@ -1,3 +1,5 @@
+//人数を選択するページ
+
 import 'package:flutter/material.dart';
 import '../../components/select_people/select_people.dart';
 import '../now_playing/now_playing.dart';
