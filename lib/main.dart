@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screen/playing/playing_screen.dart';
-import 'screen/select_people/select_people.dart';
+import 'screen/set_pepple/set_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,12 +16,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        textTheme: GoogleFonts.notoSansJpTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
-      home: const MyHomePage(title: 'HackUkosen'),
-      routes: {
-        '/playing': (context) => SubPage(),
-        '/NumberSelector': (context) => NumberSelector() // ルートを追加
-      },
+      home: const MyHomePage(title: 'HackUkosen',),
     );
   }
 }
@@ -47,13 +46,13 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed('/playing'), // ボタンを押したときのアクション
-              child: const Text('始めようぜ！'),
-            ),
-            SizedBox(height: 20), // ボタンの間にスペースを追加
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed('/NumberSelector'),
-              child: const Text('人数を選択する'),
+              onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PlayingPage()),
+                  );
+                }, // ボタンを押したときのアクション
+              child: const Text('始めようkぜ！'),
             ),
           ],
         ),
