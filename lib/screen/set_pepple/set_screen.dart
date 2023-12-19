@@ -4,6 +4,8 @@ import '../now_playing/now_playing.dart';
 
 import '../../components//button//button.dart';
 
+import '../../participant/Participants.dart';
+
 class PlayingPage extends StatefulWidget {
   const PlayingPage({Key? key}) : super(key: key);
 
@@ -43,6 +45,7 @@ class _PlayingPageState extends State<PlayingPage> {
                             selectedNumber: selectedNumber,
                           )),
                 );
+                var participants = Participants.initInstance(selectedNumber);
               },
             ),
           ],
