@@ -1,37 +1,55 @@
 //スコアの木を生成するコンポーネント
-
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
-final Color primaryColor = Colors.orange;
-const TargetPlatform platform = TargetPlatform.android;
+class BallDetails {
+  Offset position;
+  Color color;
+  double size;
 
-void main() {
-  runApp(XmasTree());
+  BallDetails(this.position, this.color, this.size);
 }
 
-class ScoreXmasTree extends CustomPainter {
+class XmasTreePainter extends CustomPainter {
   final int treeSize;
   final int ballNum;
+  final List<BallDetails> balls;
 
-  ScoreXmasTree(this.treeSize, this.ballNum);
+  XmasTreePainter(this.treeSize, this.ballNum)
+      : balls = List.generate(ballNum, (index) {
+          double randomPosY = math.Random().nextDouble();
+          double randomPosX = math.Random().nextDouble();
+
+          //ball color
+          List<Color> colorList = [
+            Color.fromARGB(255, 255, 97, 97),
+            Color.fromARGB(255, 22, 150, 255),
+            Color.fromARGB(255, 0, 255, 255),
+            Color.fromARGB(255, 0, 255, 81),
+            Color.fromARGB(255, 255, 215, 0),
+            Color.fromARGB(255, 255, 138, 206),
+          ];
+          int randomColorIndex = math.Random().nextInt(colorList.length);
+          Color randomColor= colorList[randomColorIndex];
+
+          double minSize = treeSize / 2 - treeSize / 5;
+          double maxSize = treeSize / 2;
+          double randomSize = minSize + math.Random().nextDouble() * (maxSize - minSize);
+
+          return BallDetails(Offset(randomPosX, randomPosY), randomColor, randomSize);
+        });
 
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint();
-    paint.color = Colors.green;
+    paint.color = const Color.fromRGBO(0, 168, 109, 1);
 
     var leaves = Path();
 
     // クリスマスツリー頂点の座標
     Offset topPos = Offset(size.width / 2, size.height / 5);
-
     int i = 3;
-
-    // クリスマスツリー頂点からの距離 dft: distance from top
     double dft = 0;
-
-    // クリスマスツリーを構成する三角形の1辺の長さ
     double sideLength = 0;
 
     for (i = 0; i < treeSize; i++) {
@@ -49,26 +67,26 @@ class ScoreXmasTree extends CustomPainter {
     leaves.close();
     canvas.drawPath(leaves, paint);
 
-    
     // もみの木のみき
     var trunkLeft = topPos.dx - i;
     var trunkTop = dft + sideLength * math.cos(math.pi / 6);
     var trunkWidth = 2 * i.toDouble();
     var trunkHeight = i.toDouble();
 
-    paint.color = Colors.brown;
+    paint.color = Color.fromARGB(255, 86, 40, 25);
     var trunk = Rect.fromLTWH(trunkLeft, trunkTop, trunkWidth, trunkHeight);
 
     canvas.drawRect(trunk, paint);
 
     // スタンドカバー
+    paint.color = Color.fromARGB(255, 151, 53, 21);
     var standLeft = trunkLeft - i;
     var standTop = trunkTop + trunkHeight;
     var standWidth = 2 * trunkWidth;
     var standHeight = 2 * trunkHeight;
     var stand = Rect.fromLTWH(standLeft, standTop, standWidth, standHeight);
     canvas.drawRect(stand, paint);
-    
+
     // ガーランド
     var garland = Paint()
       ..color = Colors.white
@@ -88,21 +106,14 @@ class ScoreXmasTree extends CustomPainter {
     canvas.drawPath(garlandPath, garland);
 
     // ボール
-    List<MaterialColor> colorList = [
-      Colors.red,
-      Colors.blue,
-      Colors.lightGreen
-    ];
+    double minSize = treeSize / 2 - treeSize / 5;
     for (int j = 0; j < ballNum; j++) {
-      double randomPosY = math.Random().nextDouble() * (trunkTop - topPos.dy);
-      double randomPosX =
-          2 * (math.Random().nextDouble() - (1 / 2)) * randomPosY / 4;
-      int randomColorIndex = math.Random().nextInt(colorList.length);
-      paint.color = colorList[randomColorIndex];
-      canvas.drawCircle(Offset(topPos.dx + randomPosX, topPos.dy + randomPosY),
-          i * size.width / 1000, paint);
+      double randomPosY = balls[j].position.dy * (trunkTop - topPos.dy - minSize);
+      double randomPosX = 2 * (balls[j].position.dx - 0.5) * randomPosY / 4;
+      Paint ballPaint = Paint()..color = balls[j].color;
+      canvas.drawCircle(Offset(topPos.dx + randomPosX, topPos.dy + randomPosY), balls[j].size, ballPaint);
     }
-    
+
     paint.color = Colors.yellow;
     var star = Path();
 
@@ -114,108 +125,57 @@ class ScoreXmasTree extends CustomPainter {
     }
 
     canvas.drawPath(star, paint);
-    
   }
 
   @override
-  bool shouldRepaint(ScoreXmasTree oldDelegate) {
+  bool shouldRepaint(XmasTreePainter oldDelegate) {
     // return false; // oldDelegate.seeds != seeds;
     return oldDelegate.treeSize != treeSize;
   }
 }
 
-class XmasTree extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return _XmasTreeState();
-  }
-}
 
-enum barType {
-  ballNum,
-  treeSize,
-}
 
-class _XmasTreeState extends State<XmasTree> {
-  int treeSize = 20;
-  int ballNum = 10;
+// void main() {
+//   runApp(XmasTree());
+// }
 
-  Widget _adjustmentSlider(String barText, double min, double max, double value, barType bar) {
-      return Column(
-        children: [
-          Text("$barText ${value.toInt()}"), // 整数型に戻して表示
-          ConstrainedBox(
-            constraints: const BoxConstraints.tightFor(width: 200),
-            child: Slider.adaptive(
-              min: min,
-              max: max,
-              value: value, // ここではdouble型が使われる
-              onChanged: (newValue) {
-                setState(() {
-                  if (bar == barType.ballNum) {
-                    ballNum = newValue.toInt(); // newValueをint型に変換
-                  } else if (bar == barType.treeSize) {
-                    treeSize = newValue.toInt(); // newValueをint型に変換
-                  }
-                });
-              },
-            ),
-          ),
-        ],
-      );
-    }
+// class XmasTree extends StatefulWidget {
+//   @override
+//   State<StatefulWidget> createState() {
+//     return _XmasTreeState();
+//   }
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData().copyWith(
-        // platform: platform,
-        brightness: Brightness.dark,
-        sliderTheme: SliderThemeData.fromPrimaryColors(
-          primaryColor: primaryColor,
-          primaryColorLight: primaryColor,
-          primaryColorDark: primaryColor,
-          valueIndicatorTextStyle: const DefaultTextStyle.fallback().style,
-        ),
-      ),
-      home: Scaffold(
-        body: Container(
-          constraints: const BoxConstraints.expand(),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.transparent,
-            ),
-          ),
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.transparent,
-                  ),
-                ),
-                child: SizedBox(
-                  width: 400,
-                  height: 400,
-                  child: CustomPaint(
-                    painter: ScoreXmasTree(treeSize, ballNum),
-                  ),
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _adjustmentSlider(
-                      "木の大きさ", 3, 30, treeSize.toDouble(), barType.treeSize),
-                  _adjustmentSlider(
-                      "ボールの数", 1, 30, ballNum.toDouble(), barType.ballNum),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class _XmasTreeState extends State<XmasTree> {
+//   int treeSize = 25;//おそらくmaxは25くらいsizedboxの大きさによって変わるけどもだりい
+//   int ballNum = 10;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: Scaffold(
+//         appBar: AppBar(
+//                 title: const Text('スコアの木'),
+//               ),
+//         body: Center(
+//           child:SingleChildScrollView(
+//               child: Column(children: <Widget>[
+//                 Text("すごいです！"),
+//                 CustomPaint(
+//                   child: SizedBox(
+//                     width: 500,
+//                     height: 800,
+//                     child: CustomPaint(
+//                       painter: XmasTreePainter(treeSize, ballNum),
+//                     ),
+//                   ),
+//                 ),
+//               ])
+//             ),  
+//           ),
+//       ), 
+//     );
+//   }
+// }
