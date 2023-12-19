@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 import '../../components/count_down/count_down.dart';
 import '../../components/circle_button/circle_button.dart';
 
+import '../../components/text_button/text_button.dart';
+
+import '../score/score_screen.dart';
+
 class GamePage extends StatefulWidget {
   final int selectedNumber;
   const GamePage({Key? key, required this.selectedNumber}) : super(key: key);
@@ -43,24 +47,31 @@ class _GamePageState extends State<GamePage> {
       ),
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('${widget.selectedNumber}目の人は準備してください'),
-              CustomCircleButton(
-                text: isReady ? coutDownTime.toString() : 'OK',
-                onPressed: handleReady,
-              ),
-              if (isReady)
-                CountDown(
-                  onNumberSelected: handleCountdownTime,
-                  initialCountdownTime: 5,
-                ),
-              if (isCountdownFinished)
-                Text('カウントダウンが終了しました'),
-
-            ],
-          )
-      ),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('${widget.selectedNumber}目の人は準備してください'),
+          CustomCircleButton(
+            text: isReady ? coutDownTime.toString() : 'OK',
+            onPressed: handleReady,
+          ),
+          if (isReady)
+            CountDown(
+              onNumberSelected: handleCountdownTime,
+              initialCountdownTime: 5, //初期カウントダウン時間
+            ),
+          if (isCountdownFinished) Text('カウントダウンが終了しました'),
+          CustomButton(
+            text: '次へ',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ScorePage()),
+              );
+            },
+          ),
+        ],
+      )),
     );
   }
 }
