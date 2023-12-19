@@ -8,14 +8,17 @@ import '../score/Accelerometer.dart';
 
 class Participant {
   static int _currentMaxId = 0;
+  bool _isFinished = false;
   int _id = _currentMaxId;
-  GameScore score = GameScore();
+  GameScore _score = GameScore();
   var accelerometer = Accelerometer();
 
   Participant(){
     _id = _currentMaxId;
     _currentMaxId++;
   }
+
+
 
   Future<void> playGame(Duration timelimit) async {
     var tmpGameresult = AccelerometerResultsPerGame();
@@ -27,9 +30,12 @@ class Participant {
     }
 
     //ゲーム終了後、スコアを計算する
-    score = GameScore.def(tmpGameresult);
+    _score = GameScore.def(tmpGameresult);
+    _isFinished = true;
 
   }
 
   int get id => _id;
+  int get score => _score.score;
+  bool get isFinished => _isFinished;
 }

@@ -2,10 +2,33 @@ import 'Participant.dart';
 
 
 class Participants extends Iterable<Participant>{
-  late List<Participant> participants;
 
-  Participants(int numberOfParticipants) {
+  static Participants? _instance;
+  late List<Participant> participants;
+  Iterator<Participant> _iterator = List<Participant>.empty().iterator;
+
+  static Participants initInstance(int numberOfParticipants) {
+    _instance = Participants._def(numberOfParticipants);
+    return _instance!;
+  }
+
+  static Participants getInstance() {
+    return _instance!;
+  }
+
+  Participants._def(int numberOfParticipants) {
     participants = List<Participant>.filled(numberOfParticipants, Participant());
+    _iterator = participants.iterator;
+  }
+
+  bool hasAllFinishedPlaying(){
+    return participants.every((element) => element.isFinished);
+  }
+
+  Future<void> startNextPlayerGame(Duration timelimit) async {
+    if (_iterator.moveNext()) {
+      await _iterator.current.playGame(timelimit);
+    }
   }
 
   //iterator
