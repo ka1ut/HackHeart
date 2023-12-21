@@ -10,6 +10,11 @@ import '../../components/circle_button/circle_button.dart';
 import '../../components/text_button/text_button.dart';
 
 import '../score/score_screen.dart';
+import '../../score/AccelerometerResultsPerGame.dart';
+import '../../participant/Participant.dart';
+import 'package:sensors_plus/sensors_plus.dart';
+import 'dart:async';
+
 
 class GamePage extends StatefulWidget {
   final int selectedNumber;
@@ -22,7 +27,39 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   bool isReady = false;
   bool isCountdownFinished = false;
-  int coutDownTime = 5; //タイマーの初期時間(プレイ時間)
+  int countDownTime = 5; //タイマーの初期時間(プレイ時間)
+  int currentTime = 0;
+  Participant participant = Participant.getInstance(9999);
+
+  ThreeDPoint currentAcceleromaterPoint = ThreeDPoint.def();
+
+
+  void initState() {
+    super.initState();
+
+    participant = Participant.getInstance(widget.selectedNumber);
+    accelerometerEventStream(samplingPeriod: const Duration(milliseconds: 250)).listen(
+          (sensorvalue) {
+        setState(() {
+          var point = ThreeDPoint(sensorvalue.x, sensorvalue.y, sensorvalue.z);
+          print("x: ${point.x}, y: ${point.y}, z: ${point.z}");
+          currentAcceleromaterPoint = point;
+        });
+      },
+    );
+
+    Timer.periodic(
+      // 第一引数：繰り返す間隔の時間を設定
+      const Duration(milliseconds: 200),
+      // 第二引数：その間隔ごとに動作させたい処理を書く
+      (Timer timer) {
+        if(!isReady) return;
+        currentTime++;
+        if(countDownTime < currentTime/200) return;
+        participant.addScore(currentAcceleromaterPoint);
+      },
+    );
+  }
 
   void handleReady() {
     setState(() {
@@ -32,7 +69,7 @@ class _GamePageState extends State<GamePage> {
 
   void handleCountdownTime(int time) {
     setState(() {
-      coutDownTime = time;
+      countDownTime = time;
       if (time == 0) {
         isCountdownFinished = true;
       }
@@ -49,24 +86,28 @@ class _GamePageState extends State<GamePage> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('${widget.selectedNumber}目の人は準備してください'),
+          Text('${widget.selectedNumber}番目の人は準備してください'),
           CustomCircleButton(
-            text: isReady ? coutDownTime.toString() : 'OK',
-            onPressed: handleReady,
+            text: isReady ? countDownTime.toString() : 'OK',
+            onPressed: () async {
+              handleReady();
+
+            },
           ),
           if (isReady)
             CountDown(
               onNumberSelected: handleCountdownTime,
-              initialCountdownTime: 5, //初期カウントダウン時間
+              initialCountdownTime: countDownTime, //初期カウントダウン時間
             ),
           if (isCountdownFinished) Text('カウントダウンが終了しました'),
           CustomButton(
+
             text: '次へ',
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ScorePage()),
+                    builder: (context) => ScorePage(widget.selectedNumber)),
               );
             },
           ),
