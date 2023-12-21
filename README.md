@@ -4,7 +4,8 @@
 このアプリは、ピニャータをモチーフとしており、ユーザーがスマホをカッコよく振ることで、そのカッコ良さを競うことができます。
 
 ## Technology Stack
-Flutter
+- Flutter
+    - Flutter sensor???
 
 
 
