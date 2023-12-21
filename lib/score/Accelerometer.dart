@@ -1,14 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hackxmas/score/AccelerometerResultsPerGame.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 class Accelerometer{
+  ThreeDPoint _point = ThreeDPoint.def();
 
+  Future<void> getAccelerometerData() async{
 
-  Future< ThreeDPoint > getAccelerometerData() async{
-    var point = ThreeDPoint.def();
-    accelerometerEventStream().listen((test){
-      point = ThreeDPoint(test.x, test.y, test.z);
-    });
-    return point;
   }
+
+  ThreeDPoint get point => _point;
 }
