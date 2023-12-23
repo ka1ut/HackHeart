@@ -13,4 +13,4 @@
   - [sensors_plus](https://pub.dev/packages/sensors_plus)
 
 ## お問い合わせ
-FB & お問い合わせは、(X(旧Twitter)のDM)[https://twitter.com/k1ut_]にてよろしくお願いします。
+FB & お問い合わせは、(k1ut_)[https://twitter.com/k1ut_]にてご連絡ださい
