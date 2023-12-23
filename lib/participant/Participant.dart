@@ -9,12 +9,12 @@ import '../score/Accelerometer.dart';
 
 class Participant {
   static Map<int, Participant> allParticipants = Map<int, Participant>();
-  int _id = 0;
+  static var accelerometer = Accelerometer();
 
+  int _id = 0;
   ThreeDPoint lastPoint = ThreeDPoint.def();
   bool _isFinished = false;
   GameScore _score = GameScore();
-  static var accelerometer = Accelerometer();
 
   static Participant getInstance(int id){
     //allParticipantsが空ならAccelerometer.getAccelerometerData()を呼びだす
@@ -56,6 +56,12 @@ class Participant {
     _score.addScore(score.toDouble());
 
     lastPoint = point;
+  }
+
+  static List<Participant> getRanking(){
+    var ranking = allParticipants.values.toList();
+    ranking.sort((a, b) => b.score.compareTo(a.score));
+    return ranking;
   }
 
   int get id => _id;

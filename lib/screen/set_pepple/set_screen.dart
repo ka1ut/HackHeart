@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import '../../components/select_people/select_people.dart';
 import '../now_playing/now_playing.dart';
+import '../ranking/ranking_screen.dart';
 
 import '../../components/text_button/text_button.dart';
-
 import '../../participant/Participants.dart';
 
 
@@ -54,6 +54,17 @@ class _PlayingPageState extends State<PlayingPage> {
 
               },
             ),
+            CustomButton(
+              text: 'ランキングを表示',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RankingPage()),
+                );
+              },
+            ),
+
           ],
         ),
       ),
